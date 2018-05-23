@@ -56,7 +56,6 @@ public class EvaluationDocReader {
 				story, storedPlace, version, columnHeaders, rows, sums);
 
 		return mainSheet;
-
 	}
 
 	private static List<Integer> getSums() {
@@ -79,8 +78,8 @@ public class EvaluationDocReader {
 		list.add(new ColumnHeader(getValue("E6"), getValue("E7")));
 		list.add(new ColumnHeader(getValue("E6"), getValue("F7")));
 		list.add(new ColumnHeader(getValue("E6"), getValue("G7")));
-		list.add(new ColumnHeader(getValue("H6").replace("\n", ""), getValue("H7")));
-		list.add(new ColumnHeader(getValue("H6").replace("\n", ""), getValue("I7")));
+		list.add(new ColumnHeader(getValue("H6").replace(Util.odsSep, ""), getValue("H7")));
+		list.add(new ColumnHeader(getValue("H6").replace(Util.odsSep, ""), getValue("I7")));
 		list.add(new ColumnHeader(getValue("J6"), getValue("J7")));
 		list.add(new ColumnHeader(getValue("J6"), getValue("K7")));
 		list.add(new ColumnHeader(getValue("L6"), getValue("L7")));
@@ -103,7 +102,11 @@ public class EvaluationDocReader {
 			List<Integer> numbers = new ArrayList<>();
 
 			for (int j = firstColumnIndex; j < colCount; j++) {
-				numbers.add(Integer.parseInt(getValue(j, i)));
+				try {
+					numbers.add(Integer.parseInt(getValue(j, i)));
+				} catch (NumberFormatException e) {
+					numbers.add(Integer.MIN_VALUE);	//Error
+				}
 			}
 
 			rowList.add(new EvidenceListRow(s_No, testContent, testResult, reasonOfNoTest, numbers));

@@ -19,7 +19,8 @@ public class PropatiesEntity {
 	}
 
 	public String getAllAsString() {
-		StringBuilder sb = new StringBuilder("──────").append(Util.sep);
+		StringBuilder sb = new StringBuilder("──────").append(Util.sep)
+								.append("【Sheet Information】propaties.ods").append(Util.sep);
 		versionInfo.forEach((k, v) -> sb.append(k).append(", ").append(v).append(Util.sep));
 		return sb.toString();
 	}

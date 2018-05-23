@@ -13,6 +13,7 @@ public class TestNo05 {
 	private static final EvidenceListSheetEntity evidenceList = Main.evidenceList;
 
 	public static CheckResult doTest() {
+		checkNumberFormatExeption();
 		checkRow();
 		checkColum();
 		Result checkResult = Result.NG;
@@ -21,6 +22,18 @@ public class TestNo05 {
 			checkResult = Result.OK;
 		}
 		return new CheckResult(TEST_NO, checkResult, comment);
+	}
+
+	private static void checkNumberFormatExeption() {
+		evidenceList.getRows().get(0).getNumbers().get(0);
+
+		evidenceList.getRows().stream()
+				.flatMap(r -> r.getNumbers().stream())
+				.filter(n -> n.equals(Integer.MIN_VALUE))
+				.findFirst()
+				.ifPresent(e -> {
+					sb.append("数字以外の不正な値（空欄や文字列等）のセルがあります").append(Util.sep);
+				});
 	}
 
 	private static void checkColum() {
