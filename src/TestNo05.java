@@ -2,43 +2,28 @@ import java.util.List;
 
 import entity.CheckResult;
 import entity.EvidenceListRow;
-import entity.EvidenceListSheetEntity;
 import utility.Result;
 import utility.Util;
 
 public class TestNo05 {
 	private static final int TEST_NO = 5;
-	private static StringBuilder sb = new StringBuilder();
-
-	private static final EvidenceListSheetEntity evidenceList = Main.evidenceList;
+	public static boolean isNotNumError = false;
+	public static StringBuilder sb = new StringBuilder();
 
 	public static CheckResult doTest() {
-		checkNumberFormatExeption();
+		if (isNotNumError) {
+			sb.append("数字以外の不正な値（空欄や文字列等）のセルがあります").append(Util.sep);
+		}
 		checkRow();
 		checkColum();
-		Result checkResult = Result.NG;
 		String comment = sb.toString().trim();
-		if (comment.isEmpty()) {
-			checkResult = Result.OK;
-		}
+		Result checkResult = comment.isEmpty() ? Result.OK : Result.NG;
 		return new CheckResult(TEST_NO, checkResult, comment);
 	}
 
-	private static void checkNumberFormatExeption() {
-		evidenceList.getRows().get(0).getNumbers().get(0);
-
-		evidenceList.getRows().stream()
-				.flatMap(r -> r.getNumbers().stream())
-				.filter(n -> n.equals(Integer.MIN_VALUE))
-				.findFirst()
-				.ifPresent(e -> {
-					sb.append("数字以外の不正な値（空欄や文字列等）のセルがあります").append(Util.sep);
-				});
-	}
-
 	private static void checkColum() {
-		List<Integer> sums = evidenceList.getSums();
-		evidenceList.getRows().forEach(r -> {
+		List<Integer> sums = Main.evidenceList.getSums();
+		Main.evidenceList.getRows().forEach(r -> {
 			for (int i = 0; i < sums.size(); i++) {
 				sums.set(i, sums.get(i) - r.getNumbers().get(i));
 			}
@@ -53,12 +38,12 @@ public class TestNo05 {
 
 	private static void addColumnErrorComment(int column_No) {
 		//ここの「+4」を消す
-		String column = evidenceList.getColumnHeaders().get(column_No + 4).getAllAsString();
+		String column = Main.evidenceList.getColumnHeaders().get(column_No + 4).getAllAsString();
 		sb.append("「").append(column).append("」列で合計値が間違っています").append(Util.sep);
 	}
 
 	private static void checkRow() {
-		evidenceList.getRows().stream()
+		Main.evidenceList.getRows().stream()
 				.filter(r -> r.getNumbers().get(0) != r.getNumbers().get(1) + r.getNumbers().get(2))
 				.forEach(r -> addRowErrorComment(r));
 	}

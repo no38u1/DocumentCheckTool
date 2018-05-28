@@ -14,18 +14,15 @@ public class TestNo11 {
 
 	public static CheckResult doTest() {
 		checkBugSeverityType();
-		Result checkResult = Result.NG;
 		String comment = sb.toString().trim();
-		if (comment.isEmpty()) {
-			checkResult = Result.OK;
-		}
+		Result checkResult = comment.isEmpty() ? Result.OK : Result.NG;
 		return new CheckResult(TEST_NO, checkResult, comment);
 	}
 
 	private static void checkBugSeverityType() {
 		Set<String> expected = new LinkedHashSet<>();
+		//TODO 半角スペースや大文字小文字等の微妙なブレは吸収
 		Collections.addAll(expected, "Critical(Blocker + Critical)", "Major", "Normal", "Minor");
-
 		Set<String> actual = new LinkedHashSet<>();
 		//TODO ここの7を消す
 		for (int i = 7; i < evidenceList.getColumnHeaders().size(); i++) {

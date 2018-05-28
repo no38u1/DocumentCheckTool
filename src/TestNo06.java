@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import entity.CheckResult;
 import entity.EvidenceListRow;
 import entity.EvidenceListSheetEntity;
@@ -12,19 +14,16 @@ public class TestNo06 {
 
 	public static CheckResult doTest() {
 		checkExistenceOfComment();
-		Result checkResult = Result.NG;
 		String comment = sb.toString().trim();
-		if (comment.isEmpty()) {
-			checkResult = Result.OK;
-		}
+		Result checkResult = comment.isEmpty() ? Result.OK : Result.NG;
 		return new CheckResult(TEST_NO, checkResult, comment);
 	}
 
 	private static void checkExistenceOfComment() {
 		evidenceList.getRows().stream()
-		.filter(r -> !r.getNumbers().get(2).equals(0))	//2は「NA」列
-			.filter(r -> r.getReasonOfNoTest().trim().equals("-"))	//TODO 空欄等の場合にも対応できるようにする
-			.forEach(r -> addErrorComment(r));
+				.filter(r -> !r.getNumbers().get(2).equals(0)) //2は「NA」列
+				.filter(r -> Arrays.asList("-", "_", "　", " ", "").contains(r.getReasonOfNoTest().trim()))
+				.forEach(r -> addErrorComment(r));
 	}
 
 	private static void addErrorComment(EvidenceListRow row) {

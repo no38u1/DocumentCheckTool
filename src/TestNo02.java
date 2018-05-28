@@ -22,7 +22,7 @@ public class TestNo02 {
 
 	private static void check() {
 		if (date == null) {
-			sb.append("Actual Start Dateが未記載の為、正しいVersionかどうかの判断ができません");
+			sb.append("チケットにActual Start Dateが未記載の為、正しいVersionかどうかの判断ができません");
 //		} else if (false){
 			//TODO 未来日付だった場合のエラー処理
 		} else{
@@ -38,7 +38,6 @@ public class TestNo02 {
 					sb.append("- 使用すべきVersion: ").append(expectedVer).append("以降").append(Util.sep)
 					.append("- Evidence list記載のVersion: ").append(actualVer);
 					checkResult = Result.OK;
-
 				};
 			} catch (NullPointerException e) {
 				sb.append("Actual Start Dateが古すぎる為、正しいVersionかどうかの判断ができません");

@@ -63,7 +63,14 @@ public class EvaluationDocReader {
 
 		int sumRow = rowCount;
 		for (int j = firstColumnIndex; j < colCount; j++) {
+			try {
 			sumList.add(Integer.parseInt(getValue(j, sumRow)));
+			} catch (NumberFormatException e) {
+				sumList.add(0); //数値以外が入っていた場合、とりあえず0を代入
+				TestNo05.isNotNumError = true;
+				//TODO 空欄の場合と不正な文字列の場合で処理を分ける
+				//TODO 不正な文字列の位置をError Messageへ追加
+			}
 		}
 		return sumList;
 	}
@@ -92,7 +99,6 @@ public class EvaluationDocReader {
 	private static List<EvidenceListRow> getRows() {
 
 		List<EvidenceListRow> rowList = new ArrayList<>();
-
 		for (int i = firstRowIndex; i < rowCount; i++) {
 			int s_No = Integer.parseInt(getValue(0, i));
 			String testContent = getValue(1, i);
@@ -105,15 +111,16 @@ public class EvaluationDocReader {
 				try {
 					numbers.add(Integer.parseInt(getValue(j, i)));
 				} catch (NumberFormatException e) {
-					numbers.add(Integer.MIN_VALUE);	//Error
+					numbers.add(0); //数値以外が入っていた場合、とりあえず0を代入
+					TestNo05.isNotNumError = true;
+					//TODO 空欄の場合と不正な文字列の場合で処理を分ける
+					//TODO 不正な文字列の位置をError Messageへ追加
 				}
 			}
-
 			rowList.add(new EvidenceListRow(s_No, testContent, testResult, reasonOfNoTest, numbers));
 		}
 		return rowList;
 	}
-
 
 	public static String getFileInfoAsString() {
 		StringBuilder sb = new StringBuilder();
